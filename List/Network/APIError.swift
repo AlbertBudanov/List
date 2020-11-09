@@ -8,6 +8,10 @@
 import Foundation
 
 enum APIError: Error {
+    case parsingError
+    case conflict
+    case notFound
+    case forbidden
     case internalServerError
     case serviceTemporaryUnavailable
     case unknown
@@ -16,6 +20,7 @@ enum APIError: Error {
     var message: String{
         switch self{
         case .internalServerError: return "Внутренняя ошибка сервера"
+        case .conflict: return "Конфликт"
         default:
             return "Error"
         }
@@ -25,6 +30,9 @@ enum APIError: Error {
     
     init?(from statusCode: Int) {
         switch statusCode{
+        case 403: self = .forbidden
+        case 404: self = .notFound
+        case 409: self = .conflict
         case 500: self = .internalServerError
         case 503: self = .serviceTemporaryUnavailable
         default: self = .unknown
