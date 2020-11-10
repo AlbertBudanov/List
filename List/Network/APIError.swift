@@ -21,6 +21,9 @@ enum APIError: Error {
         switch self{
         case .internalServerError: return "Внутренняя ошибка сервера"
         case .conflict: return "Конфликт"
+        case .notFound: return "404"
+        case .forbidden: return "Доступ запрещен"
+        case .serviceTemporaryUnavailable: return "Сервис временно недоступен"
         default:
             return "Error"
         }

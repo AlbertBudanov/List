@@ -9,21 +9,24 @@ import UIKit
 
 class DetailViewController: UIViewController {
 
+    
+    var idLabel = UILabel()
+    var id: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.backgroundColor = .green
+        createLabel()
+        
+        idLabel.text = "Id post: " + id!
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func createLabel() {
+        idLabel.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+        idLabel.center = view.center
+        self.view.addSubview(idLabel)
+        
     }
-    */
 
 }

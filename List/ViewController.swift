@@ -8,7 +8,8 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
+    
     var postsCollectionView:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -18,45 +19,50 @@ class ViewController: UIViewController {
     }()
     
     var apiManager: APIManager = APIManagerImpl()
-//    private var postsCollectionView = PostsCollectionView()
+    //    private var postsCollectionView = PostsCollectionView()
     var posts = [Post]()
     
+    //MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+        
         loadInfo()
         setCollectionView()
-        // Do any additional setup after loading the view.
     }
-
     
-//    MARK: LoadInfo
+    
+    //    MARK: LoadInfo
     func loadInfo() {
         apiManager.fetchPost().done { [weak self] (posts) in
             guard let strongSelf = self else { return }
+            
+            strongSelf.routeToDetail()
             
             self?.posts = posts
             
             print(posts)
             
+            
             self?.postsCollectionView.reloadData()
-
-            strongSelf.routeToDetail()
+            
+            
+            
         }.catch { (error) in
             if let error = error as? APIError{
-                print(error.message)
+//                print(error.message)
+                self.setAlert(error: error.message)
             }
             print(error)
         }
     }
     
-//    MARK: route for detail
+    //    MARK: route for detail
     func routeToDetail(){
         
         
     }
-
-//    MARK: setCollectionView
+    
+    //    MARK: setCollectionView
     func setCollectionView() {
         view.addSubview(postsCollectionView)
         postsCollectionView.backgroundColor = .white
@@ -69,9 +75,50 @@ class ViewController: UIViewController {
         postsCollectionView.delegate = self
         postsCollectionView.register(PostsCollectionViewCell.self, forCellWithReuseIdentifier: "cell")
     }
+    
+//    MARK: setAlert
+    func setAlert(error: String) {
+        let errorAlert = UIAlertController(title: "Error", message: error, preferredStyle: .alert)
+        let action = UIAlertAction(title: "Retry", style: .default) { (errorAlert) in
+            self.loadInfo()
+        }
+        errorAlert.addAction(action)
+        self.present(errorAlert, animated: true, completion: nil)
+    }
 }
 
 
+
+// MARK: - Protocols
+extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return posts.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = postsCollectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PostsCollectionViewCell
+        cell.setCell(post: posts[indexPath.row])
+        return cell
+    }
+    
+//    layout
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let cell = postsCollectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PostsCollectionViewCell
+        return CGSize(width: UIScreen.main.bounds.width - 10, height: 310)
+    }
+    
+//   MARK: - Open detail
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        
+        let storyboard = UIStoryboard(name: "DetailViewController", bundle: nil)
+        let vc = storyboard.instantiateInitialViewController() as! DetailViewController
+        vc.id = "\(posts[indexPath.row].id)"
+        self.present(vc, animated: true, completion: nil)
+    }
+}
+
+
+// MARK: Task
 /*
  
  1.Получить все посты по API, вывести на экран в UICollectionView (self.collectionView.reloadData())
@@ -82,33 +129,3 @@ class ViewController: UIViewController {
  
  
  */
-
-
-extension ViewController: UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return posts.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = postsCollectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! PostsCollectionViewCell
-        cell.layer.cornerRadius = 20
-        cell.backgroundColor = #colorLiteral(red: 1, green: 0.8982171416, blue: 0.8455123305, alpha: 1)
-        cell.userIdLabel.text = "User id: \(posts[indexPath.row].userId)"
-        cell.idLabel.text = "Id: \(posts[indexPath.row].id)"
-        cell.titleLabel.text = "Title: \(posts[indexPath.row].title)"
-        cell.bodyLabel.text = "Body: \(posts[indexPath.row].body)"
-        return cell
-    }
-//
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: UIScreen.main.bounds.width - 20, height: 350)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        let storyboard = UIStoryboard(name: "DetailViewController", bundle: nil)
-        let vc = storyboard.instantiateViewController(identifier: "Detail")
-        self.present(vc, animated: true, completion: nil)
-        //        print("\(posts[indexPath.row].id), title: \(posts[indexPath.row].title)")
-    }
-}
