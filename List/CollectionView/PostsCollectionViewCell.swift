@@ -9,82 +9,87 @@ import UIKit
 
 class PostsCollectionViewCell: UICollectionViewCell {
     
-    
-    
-    //    static let reuseId = "PostsCollectionViewCell"
-    let gg = 60
     let userIdLabel: UILabel = {
         let label = UILabel()
         label.textColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
         label.backgroundColor = .white
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
+    
+    let idLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        label.backgroundColor = .white
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     //
-        let idLabel: UILabel = {
-            let label = UILabel()
-            label.textColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
-            label.backgroundColor = .white
-            label.translatesAutoresizingMaskIntoConstraints = false
-            return label
-        }()
-    //
-        let titleLabel: UILabel = {
-            let label = UILabel()
-            label.textColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
-            label.backgroundColor = .white
-            label.numberOfLines = 0
-            label.translatesAutoresizingMaskIntoConstraints = false
-            return label
-        }()
+    let titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        label.backgroundColor = .white
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
-        let bodyLabel: UILabel = {
-            let label = UILabel()
-            label.textColor = #colorLiteral(red: 0.6000000238, green: 0.6000000238, blue: 0.6000000238, alpha: 1)
-            label.backgroundColor = .white
-            label.numberOfLines = 0
-            label.translatesAutoresizingMaskIntoConstraints = false
-            return label
-        }()
-   
+    let bodyLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = #colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)
+        label.backgroundColor = .white
+        label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
+//        не работает
+        label.lineBreakMode = .byCharWrapping
+
+        return label
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(userIdLabel)
-        addSubview(idLabel)
-        addSubview(titleLabel)
-        addSubview(bodyLabel)
-//        userIdLabel.frame = CGRect(x: 0, y: 0, width: 20, height:0)
-        userIdLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 20).isActive = true
-        userIdLabel.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -20).isActive = true
-        userIdLabel.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
-//        userIdLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -10).isActive = true
-//        userIdLabel.heightAnchor.constraint(equalToConstant: 200).isActive = true
-        userIdLabel.sizeToFit()
+        self.configure()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+        self.configure()
+    }
+    
+    private func configure(){
+        setupViews()
+    }
+    
+    
+    fileprivate func setupViews() {
+        let superview = self.contentView
+        superview.addSubview(userIdLabel)
+        superview.addSubview(idLabel)
+        superview.addSubview(titleLabel)
+        superview.addSubview(bodyLabel)
+        superview.backgroundColor = #colorLiteral(red: 1, green: 0.8114075661, blue: 0.9726718068, alpha: 1)
+        superview.layer.cornerRadius = 10
         
-//        userIdLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        userIdLabel.topAnchor.constraint(equalTo: superview.topAnchor, constant: 16).isActive = true
+        userIdLabel.leftAnchor.constraint(equalTo: superview.leftAnchor, constant: 16).isActive = true
+        superview.trailingAnchor.constraint(equalTo: self.userIdLabel.trailingAnchor, constant: 16).isActive = true
         
-        idLabel.leadingAnchor.constraint(equalTo: userIdLabel.leadingAnchor).isActive = true
-        idLabel.trailingAnchor.constraint(equalTo: userIdLabel.trailingAnchor).isActive = true
-        idLabel.topAnchor.constraint(equalTo: userIdLabel.bottomAnchor, constant: 10).isActive = true
-//        idLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        idLabel.sizeToFit()
-
-        titleLabel.leadingAnchor.constraint(equalTo: idLabel.leadingAnchor).isActive = true
-        titleLabel.trailingAnchor.constraint(equalTo: idLabel.trailingAnchor).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: idLabel.bottomAnchor, constant: 10).isActive = true
-//                titleLabel.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        titleLabel.sizeToFit()
-
-        bodyLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor).isActive = true
-        bodyLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor).isActive = true
-        bodyLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 10).isActive = true
-//        bodyLabel.heightAnchor.constraint(equalToConstant: 60)
-        bodyLabel.bottomAnchor.constraint(equalTo: bottomAnchor, constant: 10).isActive = true
-        bodyLabel.sizeToFit()
+        idLabel.topAnchor.constraint(equalTo: userIdLabel.bottomAnchor, constant: 16).isActive = true
+        idLabel.leftAnchor.constraint(equalTo: superview.leftAnchor, constant: 16).isActive = true
+        superview.trailingAnchor.constraint(equalTo: self.idLabel.trailingAnchor, constant: 16).isActive = true
         
-        layer.cornerRadius = 20
-        backgroundColor = #colorLiteral(red: 1, green: 0.8982171416, blue: 0.8455123305, alpha: 1)
+        titleLabel.topAnchor.constraint(equalTo: idLabel.bottomAnchor, constant: 16).isActive = true
+        titleLabel.leftAnchor.constraint(equalTo: superview.leftAnchor, constant: 16).isActive = true
+        titleLabel.bottomAnchor.constraint(equalTo: self.titleLabel.bottomAnchor, constant: -16).isActive = true
+        superview.trailingAnchor.constraint(equalTo: self.titleLabel.trailingAnchor, constant: 16).isActive = true
+        
+        bodyLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16).isActive = true
+        bodyLabel.leftAnchor.constraint(equalTo: superview.leftAnchor, constant: 16).isActive = true
+        bodyLabel.bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -16).isActive = true
+        superview.trailingAnchor.constraint(equalTo: self.bodyLabel.trailingAnchor, constant: 16).isActive = true
     }
     
     func setCell(post: Post) {
@@ -93,9 +98,18 @@ class PostsCollectionViewCell: UICollectionViewCell {
         titleLabel.text = "Title: " + post.title
         bodyLabel.text = "Body: " + post.body
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    override public func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        let targetSize: CGSize
+        let horizontalPriority: UILayoutPriority
+        let verticalPriority: UILayoutPriority
+        targetSize = .init(width: layoutAttributes.size.width, height: UIView.layoutFittingCompressedSize.height)
+        horizontalPriority = .required
+        verticalPriority = .defaultLow
+        layoutAttributes.size = self.contentView.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: horizontalPriority, verticalFittingPriority: verticalPriority)
+        layoutAttributes.size.height.round(.up)
+        layoutAttributes.size.width.round(.up)
+        return layoutAttributes
     }
+    
 }
 
