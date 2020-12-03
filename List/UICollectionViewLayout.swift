@@ -11,9 +11,9 @@ extension UICollectionViewLayout {
     public static var verticalFlow: UICollectionViewFlowLayout {
         let result = UICollectionViewFlowLayout()
         result.scrollDirection = .vertical
-        
-        result.sectionInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
+
         result.minimumLineSpacing = 10
+        result.minimumInteritemSpacing = 10
         return result
     }
     
