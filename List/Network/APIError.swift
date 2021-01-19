@@ -29,7 +29,7 @@ enum APIError: Error {
         }
     }
     
-//    MARK: добавить другие статусы ошибок смотри проект по спорту, там есть подобные ошибки
+//    MARK: добавить другие статусы ошибок 
     
     init?(from statusCode: Int) {
         switch statusCode{

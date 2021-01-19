@@ -13,6 +13,7 @@ enum APIRoutes: URLRequestConvertible{
     
     case posts
     case post(id: String)
+    case photos
     
     
     static let baseURL: String = "https://jsonplaceholder.typicode.com/"
@@ -23,19 +24,21 @@ enum APIRoutes: URLRequestConvertible{
             return "posts"
         case .post(let id):
             return "posts/\(id)"
+        case .photos:
+            return "photos"
         }
     }
     
     var method: HTTPMethod{
         switch self {
-        case .posts,.post:
+        case .posts,.post,.photos:
             return .get
         }
     }
     
     var headers: [String: String]?{
         switch self{
-        case .posts, .post:
+        case .posts, .post, .photos:
             return nil
         }
     }
